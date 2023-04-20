@@ -29,6 +29,9 @@ class DataIngestion:
         logging.info('Enter the data ingestion method or component')
         try:
             df = pd.read_csv("notebook\data\loan-train.csv")
+            df = df.drop(['Loan_ID'],axis=1)
+            df['Loan_Status'] = df['Loan_Status'].replace({'Y': 1,'N': 0})
+            
             logging.info('Read the dataset as dataframe')
             
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok = True)
@@ -40,7 +43,6 @@ class DataIngestion:
             train_set,test_set = train_test_split(df,test_size=0.2,random_state=42)
 
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
-            
             test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
 
             logging.info('Ingestion of the data is Complete')
@@ -56,8 +58,9 @@ class DataIngestion:
 if __name__ == '__main__':
     obj = DataIngestion()
     train_data,test_data = obj.initiate_data_ingestion()
+
     data_transformation = DataTransformation()
-    train_arr,test_arr = data_transformation.initiate_data_transformation(train_data,test_data)
+    train_arr,test_arr,_ = data_transformation.initiate_data_transformation(train_data,test_data)
 
     Modeltrainer = Modeltrainer()
     print(Modeltrainer.initiate_model_trainer(train_arr,test_arr))

@@ -41,8 +41,8 @@ class DataTransformation:
                 'Dependents', 
                 'Education', 
                 'Self_Employed', 
-                'Property_Area', 
-                'Loan_Status'
+                'Property_Area',
+               
             ]
 
             num_pipeline = Pipeline(
@@ -57,12 +57,14 @@ class DataTransformation:
                 steps=[
                     ('Imputer',SimpleImputer(strategy='most_frequent')),
                     ('one_hot_encoder',OneHotEncoder()),
-                    ('scaler',StandardScaler())
+                    ('scaler',StandardScaler(with_mean=False))
                 ]
             )
 
-            logging.info("Numerical Columns Scaling Completed")
-            logging.info("Categorical Columns Encoding Completed")
+            # logging.info("Numerical Columns Scaling Completed")
+            # logging.info("Categorical Columns Encoding Completed")
+            logging.info(f'Categorical columns: {categorical_features}')
+            logging.info(f'Numerical columns: {numerical_features}')
 
             preprocessor = ColumnTransformer(transformers=
                 [
@@ -89,13 +91,8 @@ class DataTransformation:
             preprocessing_obj = self.get_data_transformer_object()
 
             target_feature_name = 'Loan_Status'
-            # numerical_features = [
-            #     'ApplicantIncome', 
-            #     'CoapplicantIncome', 
-            #     'LoanAmount', 
-            #     'Loan_Amount_Term', 
-            #     'Credit_History'
-            #     ]
+            numerical_features = ['ApplicantIncome', 'CoapplicantIncome', 'LoanAmount',  'Loan_Amount_Term', 'Credit_History']
+
             input_feature_train_df = train_df.drop(columns=[target_feature_name],axis=1)
             target_feature_train_df = train_df[target_feature_name]
 
