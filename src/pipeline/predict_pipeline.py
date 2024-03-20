@@ -4,6 +4,7 @@ import pandas as pd
 from src.exception import CustomException
 from src.utils import load_object
 from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
 
 
 class PredictPipeline:
